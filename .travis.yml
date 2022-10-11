@@ -1,0 +1,20 @@
+# specify the language used
+language: node_js
+
+# list any node_js version you want to test against
+node_js:
+  - "16"
+
+# Install services
+services:
+  - docker
+
+# Run your tests or check for linting errors.
+script:
+  - echo "run tests if any"  
+
+deploy:
+  - provider: script
+    script: ./deploy.sh
+    on:
+      branch: master  
