@@ -1,0 +1,50 @@
+version: '3.1'
+
+services:
+  nginx:
+      depends_on:
+        - frontend
+        - backend
+      restart: always
+      build:
+        dockerfile: Dockerfile.dev
+        context: ./nginx
+      ports:
+        - '80:80'
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+        - type: volume
+          source: mongodb_data_volume
+          target: /data/db
+  backend:
+    restart: always
+    volumes:
+      - ./backend/node_modules
+      - ./backend/:/usr/src/app
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev 
+    environment:
+      MONGODB_URL: mongodb://mongo:27017/
+      PORT: 3001
+      FOO: "bar"
+  frontend:
+    restart: always
+    volumes:
+      - ./frontend/node_modules
+      - ./frontend/:/usr/src/app
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      WATCHPACK_POLLING: "true" 
+      CHOKIDAR_USEPOLLING: "true"
+      PORT: 3000
+      WDS_SOCKET_PORT: 0
+volumes:
+      mongodb_data_volume:
+        external: true

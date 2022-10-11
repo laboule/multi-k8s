@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend-nodeport
+spec:
+  selector:
+    app: backend
+  type: NodePort
+  ports:
+    - port: 3051
+      targetPort: 3001
+      nodePort: 31516

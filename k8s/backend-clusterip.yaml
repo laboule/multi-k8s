@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend-clusterip
+spec:
+  selector:
+    app: backend
+  type: ClusterIP
+  ports:
+    - port: 3001
+      targetPort: 3001
